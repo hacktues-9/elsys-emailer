@@ -55,7 +55,11 @@ class EmailSender:
             part['Content-Disposition'] = 'attachment; filename="%s"' % basename(file)
             msg.attach(part)
 
-        self.server.sendmail(EMAIL, to, msg.as_string())
+        try:
+            self.server.sendmail(EMAIL, to, msg.as_string())
+        except Exception as e:
+            print(e)
+            print("Continuing...")
             
 
     def get_recipients_string(self, emails):
@@ -66,11 +70,30 @@ class EmailSender:
         return recipients
 
     def send_emails (self):
-        TESTMAILS = [("kaloyan.s.doychinov.2019@elsys-bg.org", "Калоян Дойчинов"), ("kokolia1070@gmail.com", "Калоян Дойчинов Две")]
-        self.send_email_with_attachments(SUBJECT, BODY, self.get_recipients_string(TESTMAILS), ["certificates/Християн Тодоров.png", "certificates/Филостратос Титопулос.png"])
-        # for i in range(TEAMS_NUM):
-        #     print(f"[SENDING] Email to team {i+1}")
-        #     send_email(f"Сертификати за участие", BODY, emails[i][0][0])
+        # TESTMAILS = [("kaloyan.s.doychinov.2019@elsys-bg.org", "Калоян Дойчинов"), ("fsdsdfsdf@sdfs.com", "Калоян Дойчинов Две")]
+        # self.send_email_with_attachments(SUBJECT, BODY, self.get_recipients_string(TESTMAILS), ["certificates/Християн Тодоров.png", "certificates/Филостратос Титопулос.png"])
+        db = Teams()
+        for i in range(TEAMS_NUM):
+            team = db.get_team_emails(i+1)
+            if len(team) > 0:
+                # emails = []
+                # for member in team:
+                #     emails.append(member[0])
+
+                recipients = self.get_recipients_string(team)
+                files = []
+
+                for member in team:
+                    files.append(f"certificates/{member[1]}.png")
+
+                print(f"[SENDING] Email to team {i+1}")
+                print(f"[SENDING] Recipients: {recipients}")
+                print(f"[SENDING] Files: {files}")
+                print()
+                print("--------------------------------------------------")
+                print()
+                # self.send_email_with_attachments(SUBJECT, BODY, recipients, files) # uncomment to send emails
+                    
 
     def print_emails(self):
         db = Teams()
