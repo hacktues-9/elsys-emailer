@@ -1,1 +1,3 @@
-# tues-emailer
+# elsys-emailer
+
+send certificates to students
