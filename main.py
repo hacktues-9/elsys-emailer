@@ -14,8 +14,7 @@ TEAMS_NUM = 63
 
 SUBJECT = "Сертификати за участие в HackTUES 9"
 
-BODY = """
-Здравейте,
+BODY = """Здравейте,
 
 Радваме се, че участвахте в тазгодишното издание на HackTUES - HackTUES Security. Ето и вашите грамоти за участие :)
 
@@ -76,13 +75,9 @@ class EmailSender:
         for i in range(TEAMS_NUM):
             team = db.get_team_emails(i+1)
             if len(team) > 0:
-                # emails = []
-                # for member in team:
-                #     emails.append(member[0])
-
                 recipients = self.get_recipients_string(team)
-                files = []
 
+                files = []
                 for member in team:
                     files.append(f"certificates/{member[1]}.png")
 
@@ -92,8 +87,8 @@ class EmailSender:
                 print()
                 print("--------------------------------------------------")
                 print()
-                # self.send_email_with_attachments(SUBJECT, BODY, recipients, files) # uncomment to send emails
-                    
+
+                # self.send_email_with_attachments(SUBJECT, BODY, recipients, files) # uncomment to send emails                    
 
     def print_emails(self):
         db = Teams()
